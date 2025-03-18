@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 use function Laravel\Prompts\password;
 
@@ -19,7 +20,7 @@ class RegisterController extends Controller
         $validator = Validator::make($request->all(), [
             'name'      => 'required',
             'email'     => 'required|email|unique:users',
-            'password'  => 'required|min:8|confirmed'
+            'password'  => 'required|string|min:8|confirmed'
         ]);
 
         if ($validator->fails()) {
@@ -29,7 +30,7 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcsqrt($request->password)
+            'password' => Hash::make($request->password)
         ]);
 
         if ($user) {

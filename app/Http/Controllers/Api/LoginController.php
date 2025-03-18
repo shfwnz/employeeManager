@@ -15,7 +15,7 @@ class LoginController extends Controller
     {
         //
         $validator = Validator::make($request->all(), [
-            'email' => 'required',
+            'email' => 'required|email',
             'password' => 'required'
         ]);
 
@@ -26,9 +26,16 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (!$token = auth()->guard('api')->attempt($credentials)) {
-            return response()->json(['success' => false, 'message' => 'Incorrect Email or Password'], 401);
+            return response()->json([
+                'success' => false,
+                'message' => 'Incorrect Email or Password'
+            ], 401);
         }
 
-        return response()->json(['success' => true, 'user' => auth()->guard('api')->user(), 'token' => $token]);
+        return response()->json([
+            'success' => true,
+            'user' => auth()->guard('api')->user(),
+            'token' => $token
+        ], 200);
     }
 }
