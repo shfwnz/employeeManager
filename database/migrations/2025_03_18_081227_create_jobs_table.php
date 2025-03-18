@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('pekerjaan', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('karyawan_id')->constrained('karyawan')->onDelete('cascade');
+            $table->foreignId('divisi_id')->constrained('divisi');
+            $table->foreignId('jabatan_id')->constrained('jabatan');
+            $table->date('tanggal_bergabung');
+            $table->decimal('gaji', 12);
             $table->timestamps();
         });
     }
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jobs');
+        Schema::dropIfExists('pekerjaan');
     }
 };

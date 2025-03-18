@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('dokumen', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('karyawan_id')->constrained('karyawan')->onDelete('cascade');
+            $table->string('nama_dokumen');
+            $table->string('jenis_dokumen');
+            $table->string('file_path');
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('documents');
+        Schema::dropIfExists('dokumen');
     }
 };

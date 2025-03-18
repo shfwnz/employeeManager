@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('divisi', function (Blueprint $table) {
             $table->id();
+            $table->string('nama_divisi');
+            $table->text('deskripsi');
             $table->timestamps();
         });
     }
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('divisions');
+        Schema::dropIfExists('divisi');
     }
 };
