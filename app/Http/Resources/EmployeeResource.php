@@ -7,6 +7,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class EmployeeResource extends JsonResource
 {
+    public $status;
+    public $message;
+    public $resource;
+
+    public function __construct($status, $message, $resource)
+    {
+        parent::__construct($resource);
+        $this->status = $status;
+        $this->message = $message;
+    }
     /**
      * Transform the resource into an array.
      *
