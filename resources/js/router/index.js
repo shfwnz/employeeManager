@@ -20,6 +20,7 @@ const routes = [
     {
         path: "/logout",
         component: Logout,
+        beforeEnter: authMiddleware,
     },
     {
         path: "/dashboard",

@@ -1,27 +1,18 @@
 <?php
 
-use App\Http\Controllers\Api\DivisionController;
-use App\Http\Controllers\Api\EmployeeController;
-use App\Http\Controllers\Api\JobController;
-use App\Http\Controllers\Api\LoginController;
-use App\Http\Controllers\Api\LogoutController;
-use App\Http\Controllers\Api\PositionController;
-use App\Http\Controllers\Api\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', RegisterController::class)->name('register');
-Route::post('/login', LoginController::class)->name('login');
+Route::post('/register', App\Http\Controllers\Api\RegisterController::class)->name('register');
+Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
 
-Route::middleware('auth:api')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return response()->json($request->user());
-    });
-
-    Route::post('/logout', LogoutController::class)->name('logout');
-
-    Route::apiResource('/employee', EmployeeController::class);
-    Route::apiResource('/division', DivisionController::class);
-    Route::apiResource('/position', PositionController::class);
-    Route::apiResource('/job', JobController::class);
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
 });
+
+Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('logout');
+
+Route::apiResource('/employee', App\Http\Controllers\Api\EmployeeController::class);
+Route::apiResource('/division', App\Http\Controllers\Api\DivisionController::class);
+Route::apiResource('/position', App\Http\Controllers\Api\PositionController::class);
+Route::apiResource('/job', App\Http\Controllers\Api\JobController::class);
