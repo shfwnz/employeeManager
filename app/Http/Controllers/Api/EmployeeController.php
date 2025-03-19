@@ -88,4 +88,12 @@ class EmployeeController extends Controller
 
         return new EmployeeResource(true, 'Data Karyawan berhasil diupdate', $employee);
     }
+
+    public function destroy($id)
+    {
+        $employee = Employee::find($id);
+        $employee->delete();
+
+        return new EmployeeResource(true, 'Data Karyawan berhasil dihapus', $employee);
+    }
 }
