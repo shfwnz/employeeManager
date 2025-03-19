@@ -14,4 +14,5 @@ Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('
 
 Route::apiResource('/employee', App\Http\Controllers\Api\EmployeeController::class);
 Route::apiResource('/division', App\Http\Controllers\Api\DivisionController::class);
+Route::apiResource('/position', App\Http\Controllers\Api\PositionController::class);
 Route::apiResource('/job', App\Http\Controllers\Api\JobController::class);
