@@ -15,7 +15,7 @@ class EmployeeController extends Controller
     {
         $employees = Employee::latest()->paginate(5);
 
-        return new EmployeeResource(true, 'list employee', $employees);
+        return new EmployeeResource(true, 'Daftar karyawan', $employees);
     }
 
     public function store(Request $request)
@@ -56,6 +56,9 @@ class EmployeeController extends Controller
     public function show($id)
     {
         $employee = Employee::find($id);
+        if (!$employee) {
+            return response()->json(['message' => 'Karyawan tidak ditemukan'], 404);
+        }
 
         return new EmployeeResource(true, 'Detail Karyawan', $employee);
     }
@@ -63,14 +66,14 @@ class EmployeeController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'nik' => 'sometimes|required|unique:karyawan,nik' . $id,
+            'nik' => 'sometimes|required|unique:karyawan,nik,' . $id,
             'nama_lengkap' => 'sometimes|required|string|max:255',
             'tempat_lahir' => 'sometimes|required|string|max:255',
             'tanggal_lahir' => 'sometimes|required|date',
             'jenis_kelamin' => 'sometimes|required|in:Laki-laki,Perempuan',
             'alamat' => 'sometimes|required|string',
             'telepon' => 'sometimes|required|string|max:15',
-            'email' => 'sometimes|required|email|unique:karyawan,email' . $id,
+            'email' => 'sometimes|required|email|unique:karyawan,email,' . $id,
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'status' => 'nullable|in:Aktif,Nonaktif'
         ]);
@@ -92,6 +95,9 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
         $employee = Employee::find($id);
+        if (!$employee) {
+            return response()->json(['message' => 'Karyawan tidak ditemukan'], 404);
+        }
         $employee->delete();
 
         return new EmployeeResource(true, 'Data Karyawan berhasil dihapus', $employee);
