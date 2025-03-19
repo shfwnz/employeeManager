@@ -12,7 +12,11 @@ class JobController extends Controller
 {
     public function index()
     {
-        $jobs = Job::latest()->paginate(5);
+        $jobs = Job::with([
+            'karyawan',
+            'divisi',
+            'jabatan'
+        ])->latest()->paginate(5);
 
         return new BaseResource(true, 'Daftar pekerjaan', $jobs);
     }
@@ -24,7 +28,7 @@ class JobController extends Controller
             'divisi_id' => 'required|exists:divisi,id',
             'jabatan_id' => 'required|exists:jabatan,id',
             'tanggal_bergabung' => 'required|date',
-            'gaji' => 'required|numric|min:0',
+            'gaji' => 'required|numeric|min:0',
         ]);
 
         if ($validator->fails()) {
