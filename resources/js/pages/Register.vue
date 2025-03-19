@@ -17,6 +17,15 @@
                 <input v-model="password" type="password" required />
             </div>
 
+            <div>
+                <label>Password Confirmation:</label>
+                <input
+                    v-model="password_confirmation"
+                    type="password"
+                    required
+                />
+            </div>
+
             <button type="submit">Daftar</button>
         </form>
     </div>
@@ -31,6 +40,7 @@ export default {
             name: "",
             email: "",
             password: "",
+            password_confirmation: "",
         };
     },
     methods: {
@@ -40,6 +50,7 @@ export default {
                     name: this.name,
                     email: this.email,
                     password: this.password,
+                    password_confirmation: this.password_confirmation,
                 });
 
                 alert("Registrasi berhasil! Silakan login.");
