@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    //
+    use HasFactory;
+
     protected $table = 'karyawan';
 
     protected $fillable = [
@@ -21,4 +23,9 @@ class Employee extends Model
         'foto',
         'status',
     ];
+
+    public function jobs()
+    {
+        return $this->hasMany(Job::class, 'karyawan_id');
+    }
 }
