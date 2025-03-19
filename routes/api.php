@@ -13,3 +13,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('logout');
 
 Route::apiResource('/employee', App\Http\Controllers\Api\EmployeeController::class);
+Route::apiResource('/division', App\Http\Controllers\Api\DivisionController::class);
+Route::apiResource('/job', App\Http\Controllers\Api\JobController::class);
