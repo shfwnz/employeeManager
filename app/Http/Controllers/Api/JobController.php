@@ -13,9 +13,9 @@ class JobController extends Controller
     public function index()
     {
         $jobs = Job::with([
-            'karyawan',
-            'divisi',
-            'jabatan'
+            'employee',
+            'division',
+            'position'
         ])->latest()->paginate(5);
 
         return new BaseResource(true, 'Daftar pekerjaan', $jobs);
