@@ -30,7 +30,7 @@ class EmployeeController extends Controller
             'telepon' => 'required|string|max:15',
             'email' => 'required|email|unique:karyawan,email',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'status' => 'required|in:Aktif,Nonaktif'
+            'status' => 'nullable|in:Aktif,Nonaktif'
         ]);
 
         if ($validator->fails()) {
