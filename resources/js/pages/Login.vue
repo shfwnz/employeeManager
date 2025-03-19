@@ -38,11 +38,28 @@ export default {
                     }
                 );
 
-                localStorage.setItem("token", response.data.token);
-                alert("Login berhasil!");
-                this.$router.push("/employees");
+                if (response.data && response.data.token) {
+                    localStorage.setItem("token", response.data.token);
+
+                    axios.defaults.headers.common[
+                        "Authorization"
+                    ] = `Bearer ${response.data.token}`;
+
+                    alert("Login berhasil!");
+                    this.$router.push("/employees");
+                } else {
+                    alert("Token tidak ditemukan");
+                    throw new Error("Token tidak ditemukan dalam response.");
+                }
             } catch (error) {
-                alert("Login gagal. Periksa kembali email dan password.");
+                if (error.response) {
+                    alert(
+                        error.response.data.message ||
+                            "Login gagal. Periksa kembali email dan password."
+                    );
+                } else {
+                    alert("Terjadi kesalahan. Coba lagi nanti.");
+                }
                 console.error(error);
             }
         },

@@ -68,7 +68,6 @@ export default {
         const divisions = ref([]);
         const positions = ref([]);
 
-        // Ambil data divisi & jabatan saat komponen dimuat
         onMounted(async () => {
             try {
                 const divisiRes = await axios.get(
@@ -78,8 +77,8 @@ export default {
                     "http://127.0.0.1:8000/api/position"
                 );
 
-                divisions.value = divisiRes.data.data ?? divisiRes.data;
-                positions.value = posisiRes.data.data ?? posisiRes.data;
+                divisions.value = divisiRes.data?.data || divisiRes.data;
+                positions.value = posisiRes.data?.data || posisiRes.data;
             } catch (error) {
                 console.error("Error mengambil data:", error);
             }

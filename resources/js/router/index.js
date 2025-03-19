@@ -5,6 +5,7 @@ import EmployeeForm from "../components/EmployeeForm.vue";
 import Login from "../pages/Login.vue";
 import Register from "../pages/Register.vue";
 import Dashboard from "../pages/Dashboard.vue";
+import Logout from "../components/logout.vue";
 import authMiddleware from "../middleware/auth";
 
 const routes = [
@@ -15,6 +16,10 @@ const routes = [
     {
         path: "/register",
         component: Register,
+    },
+    {
+        path: "/logout",
+        component: Logout,
     },
     {
         path: "/dashboard",
@@ -32,6 +37,7 @@ const routes = [
     {
         path: "/employees/create",
         component: EmployeeForm,
+        beforeEnter: authMiddleware,
     },
 ];
 
