@@ -52,4 +52,11 @@ class EmployeeController extends Controller
 
         return new EmployeeResource(true, 'Data employee ditambahkan', $employee);
     }
+
+    public function show($id)
+    {
+        $employee = Employee::find($id);
+
+        return new EmployeeResource(true, 'Detail Karyawan', $employee);
+    }
 }
