@@ -40,7 +40,7 @@ export default {
 
                 localStorage.setItem("token", response.data.token);
                 alert("Login berhasil!");
-                this.$router.push("/dashboard");
+                this.$router.push("/employees");
             } catch (error) {
                 alert("Login gagal. Periksa kembali email dan password.");
                 console.error(error);

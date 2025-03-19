@@ -8,16 +8,31 @@ import Dashboard from "../pages/Dashboard.vue";
 import authMiddleware from "../middleware/auth";
 
 const routes = [
-    { path: "/login", component: Login },
-    { path: "/register", component: Register },
+    {
+        path: "/login",
+        component: Login,
+    },
+    {
+        path: "/register",
+        component: Register,
+    },
     {
         path: "/dashboard",
         component: Dashboard,
+    },
+    {
+        path: "/",
+        component: Home,
+    },
+    {
+        path: "/employees",
+        component: EmployeeList,
         beforeEnter: authMiddleware,
     },
-    { path: "/", component: Home },
-    { path: "/employees", component: EmployeeList },
-    { path: "/employees/create", component: EmployeeForm },
+    {
+        path: "/employees/create",
+        component: EmployeeForm,
+    },
 ];
 
 const router = createRouter({

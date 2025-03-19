@@ -1,9 +1,11 @@
-export default function auth({ next }) {
+const authMiddleware = (to, from, next) => {
     const token = localStorage.getItem("token");
-
     if (!token) {
-        return next({ path: "/login" });
+        alert("Akses ditolak. Silakan login terlebih dahulu.");
+        next("/login");
+    } else {
+        next();
     }
+};
 
-    return next();
-}
+export default authMiddleware;
