@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\JobResource;
+use App\Http\Resources\BaseResource;
 use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -14,7 +14,7 @@ class JobController extends Controller
     {
         $jobs = Job::latest()->paginate(5);
 
-        return new JobResource(true, 'Daftar pekerjaan', $jobs);
+        return new BaseResource(true, 'Daftar pekerjaan', $jobs);
     }
 
     public function store(Request $request)
@@ -39,7 +39,7 @@ class JobController extends Controller
             'gaji' => $request->gaji,
         ]);
 
-        return new JobResource(true, 'Data pekerjaan ditambahkan', $job);
+        return new BaseResource(true, 'Data pekerjaan ditambahkan', $job);
     }
 
     public function show($id)
@@ -49,7 +49,7 @@ class JobController extends Controller
             return response()->json(['success' => false, 'message' => 'Pekerjaan tidak ditemukan'], 404);
         }
 
-        return new JobResource(true, 'Detail pekerjaan', $job);
+        return new BaseResource(true, 'Detail pekerjaan', $job);
     }
 
     public function update(Request $request, $id)
@@ -73,7 +73,7 @@ class JobController extends Controller
 
         $job->update($request->all());
 
-        return new JobResource(true, 'Data Pekerjaan berhasil diupdate', $job);
+        return new BaseResource(true, 'Data Pekerjaan berhasil diupdate', $job);
     }
 
     public function destroy($id)
@@ -84,6 +84,6 @@ class JobController extends Controller
         }
         $job->delete();
 
-        return new JobResource(true, 'Data pekerjaan berhasil dihapus', $job);
+        return new BaseResource(true, 'Data pekerjaan berhasil dihapus', $job);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Employee;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\EmployeeResource;
+use App\Http\Resources\BaseResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -15,7 +15,7 @@ class EmployeeController extends Controller
     {
         $employees = Employee::latest()->paginate(5);
 
-        return new EmployeeResource(true, 'Daftar karyawan', $employees);
+        return new BaseResource(true, 'Daftar karyawan', $employees);
     }
 
     public function store(Request $request)
@@ -50,7 +50,7 @@ class EmployeeController extends Controller
             'status' => $request->status ?? 'Aktif'
         ]);
 
-        return new EmployeeResource(true, 'Data employee ditambahkan', $employee);
+        return new BaseResource(true, 'Data employee ditambahkan', $employee);
     }
 
     public function show($id)
@@ -60,7 +60,7 @@ class EmployeeController extends Controller
             return response()->json(['message' => 'Karyawan tidak ditemukan'], 404);
         }
 
-        return new EmployeeResource(true, 'Detail Karyawan', $employee);
+        return new BaseResource(true, 'Detail Karyawan', $employee);
     }
 
     public function update(Request $request, $id)
@@ -89,7 +89,7 @@ class EmployeeController extends Controller
 
         $employee->update($request->all());
 
-        return new EmployeeResource(true, 'Data Karyawan berhasil diupdate', $employee);
+        return new BaseResource(true, 'Data Karyawan berhasil diupdate', $employee);
     }
 
     public function destroy($id)
@@ -100,6 +100,6 @@ class EmployeeController extends Controller
         }
         $employee->delete();
 
-        return new EmployeeResource(true, 'Data Karyawan berhasil dihapus', $employee);
+        return new BaseResource(true, 'Data Karyawan berhasil dihapus', $employee);
     }
 }

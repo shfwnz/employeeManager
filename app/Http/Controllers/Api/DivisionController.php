@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\DivisionResource;
+use App\Http\Resources\BaseResource;
 use App\Models\Division;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -14,7 +14,7 @@ class DivisionController extends Controller
     {
         $divisions = Division::latest()->paginate(5);
 
-        return new DivisionResource(true, 'Daftar divisi', $divisions);
+        return new BaseResource(true, 'Daftar divisi', $divisions);
     }
 
     public function store(Request $request)
@@ -33,7 +33,7 @@ class DivisionController extends Controller
             'deskripsi' => $request->deskripsi
         ]);
 
-        return new DivisionResource(true, 'Data divisi ditambahkan', $division);
+        return new BaseResource(true, 'Data divisi ditambahkan', $division);
     }
 
     public function show($id)
@@ -43,7 +43,7 @@ class DivisionController extends Controller
             return response()->json(['success' => false, 'message' => 'divisi tidak ditemukan'], 404);
         }
 
-        return new DivisionResource(true, 'Detail divisi', $division);
+        return new BaseResource(true, 'Detail divisi', $division);
     }
 
     public function update(Request $request, $id)
@@ -64,7 +64,7 @@ class DivisionController extends Controller
 
         $division->update($request->all());
 
-        return new DivisionResource(true, 'Data divisi berhasil diupdate', $division);
+        return new BaseResource(true, 'Data divisi berhasil diupdate', $division);
     }
 
     public function destroy($id)
@@ -75,6 +75,6 @@ class DivisionController extends Controller
         }
         $division->delete();
 
-        return new DivisionResource(true, 'Data divisi berhasil dihapus', $division);
+        return new BaseResource(true, 'Data divisi berhasil dihapus', $division);
     }
 }
