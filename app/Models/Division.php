@@ -16,5 +16,8 @@ class Division extends Model
         'deskripsi'
     ];
 
-    public function jobs() {}
+    public function jobs()
+    {
+        return $this->hasMany(Job::class, 'divisi_id');
+    }
 }
