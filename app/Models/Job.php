@@ -19,15 +19,15 @@ class Job extends Model
         'gaji',
     ];
 
-    public function karyawan()
+    public function employee()
     {
         return $this->belongsTo(Employee::class, 'karyawan_id');
     }
-    public function divisi()
+    public function division()
     {
         return $this->belongsTo(Division::class, 'divisi_id');
     }
-    public function jabatan()
+    public function position()
     {
         return $this->belongsTo(Position::class, 'jabatan_id');
     }
