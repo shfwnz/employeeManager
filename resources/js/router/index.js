@@ -30,7 +30,7 @@ const routes = [
     },
     {
         name: "EmployeeList",
-        path: "/karyawan-list",
+        path: "/karyawan-pekerjaan",
         component: EmployeeList,
     },
     {
@@ -40,7 +40,12 @@ const routes = [
     },
     {
         name: "edit karyawan",
-        path: "/karyawan/edit:id",
+        path: "/karyawan/edit/:id",
+        component: EmployeeEdit,
+    },
+    {
+        name: "tambah pekerjaan",
+        path: "/karyawan-pekerjaan/add",
         component: EmployeeEdit,
     },
     {
