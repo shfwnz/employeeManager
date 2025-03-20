@@ -13,18 +13,7 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = Employee::select(
-            'karyawan.id',
-            'karyawan.nama_lengkap',
-            'karyawan.status',
-            'divisi.nama_divisi as division_name',
-            'jabatan.nama_jabatan as position_name',
-            'pekerjaan.gaji as sallary'
-        )
-            ->join('pekerjaan', 'karyawan.id', '=', 'pekerjaan.karyawan_id')
-            ->join('divisi', 'pekerjaan.divisi_id', '=', 'divisi.id')
-            ->join('jabatan', 'pekerjaan.jabatan_id', '=', 'jabatan.id')
-            ->paginate(5);
+        $employees = Employee::latest()->paginate(5);
 
         return new BaseResource(true, 'Daftar karyawan', $employees);
     }

@@ -31,12 +31,12 @@ const routes = [
         component: Home,
     },
     {
-        path: "/employees",
+        path: "/employee",
         component: EmployeeList,
         beforeEnter: authMiddleware,
     },
     {
-        path: "/employees/create",
+        path: "/employee/create",
         component: EmployeeForm,
         beforeEnter: authMiddleware,
     },

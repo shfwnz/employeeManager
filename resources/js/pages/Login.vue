@@ -46,7 +46,7 @@ export default {
                     ] = `Bearer ${response.data.token}`;
 
                     alert("Login berhasil!");
-                    this.$router.push("/employees");
+                    this.$router.push("/employee");
                 } else {
                     alert("Token tidak ditemukan");
                     throw new Error("Token tidak ditemukan dalam response.");
