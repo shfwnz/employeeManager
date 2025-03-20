@@ -106,24 +106,20 @@ export default {
         this.fetchEmployees();
     },
     methods: {
-        // Method untuk mengambil statistik karyawan
         async fetchStatistics() {
             this.loading = true;
             try {
-                // Ambil total karyawan
                 const totalResponse = await axios.get(
                     "http://127.0.0.1:8000/api/employee/total"
                 );
                 this.statistics.total = totalResponse.data.data;
 
-                // Ambil jumlah karyawan aktif dan nonaktif
                 const statusResponse = await axios.get(
                     "http://127.0.0.1:8000/api/employee/status"
                 );
                 this.statistics.aktif = statusResponse.data.data.Aktif;
                 this.statistics.nonaktif = statusResponse.data.data.Nonaktif;
 
-                // Ambil daftar divisi
                 const divisionsResponse = await axios.get(
                     "http://127.0.0.1:8000/api/divisions"
                 );
@@ -135,7 +131,6 @@ export default {
             }
         },
 
-        // Method untuk mengambil data karyawan berdasarkan divisi
         async fetchEmployees() {
             this.loading = true;
             let url = "http://127.0.0.1:8000/api/employee";
