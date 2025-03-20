@@ -103,14 +103,11 @@ class EmployeeController extends Controller
         return new BaseResource(true, 'Data Karyawan berhasil dihapus', $employee);
     }
 
-    // Method untuk mendapatkan jumlah karyawan
     public function getTotalEmployees()
     {
         $totalEmployees = Employee::count();
         return new BaseResource(true, 'Total jumlah karyawan', $totalEmployees);
     }
-
-    // Method untuk mendapatkan jumlah karyawan berdasarkan status
     public function getEmployeesByStatus()
     {
         $activeEmployees = Employee::where('status', 'Aktif')->count();
@@ -122,7 +119,6 @@ class EmployeeController extends Controller
         ]);
     }
 
-    // Method untuk memfilter jumlah karyawan berdasarkan divisi
     public function getEmployeesByDivision(Request $request)
     {
         $validator = Validator::make($request->all(), [
