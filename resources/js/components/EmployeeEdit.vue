@@ -2,10 +2,10 @@
     <div class="max-w-4xl mx-auto p-6">
         <div class="bg-white shadow-lg rounded-lg p-6">
             <h2 class="text-2xl font-semibold text-gray-700 mb-4">
-                TAMBAH KARYAWAN
+                EDIT KARYAWAN
             </h2>
 
-            <form @submit.prevent="storeEmployee" class="space-y-4">
+            <form @submit.prevent="updateEmployee" class="space-y-4">
                 <!-- NIK -->
                 <div>
                     <label class="block text-gray-600 font-medium">NIK</label>
@@ -99,22 +99,20 @@
                     </p>
                 </div>
 
-                <!-- Alamat -->
+                <!-- Email -->
                 <div>
-                    <label class="block text-gray-600 font-medium"
-                        >Alamat</label
-                    >
-                    <textarea
-                        v-model="employee.alamat"
-                        rows="3"
-                        placeholder="Masukkan Alamat"
+                    <label class="block text-gray-600 font-medium">Email</label>
+                    <input
+                        type="email"
+                        v-model="employee.email"
+                        placeholder="Masukkan Email"
                         class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
-                    ></textarea>
+                    />
                     <p
-                        v-if="validation.alamat"
+                        v-if="validation.email"
                         class="text-red-500 text-sm bg-red-100 p-2 rounded-md mt-1"
                     >
-                        {{ validation.alamat[0] }}
+                        {{ validation.email[0] }}
                     </p>
                 </div>
 
@@ -137,48 +135,36 @@
                     </p>
                 </div>
 
-                <!-- Email -->
-                <div>
-                    <label class="block text-gray-600 font-medium">Email</label>
-                    <input
-                        type="email"
-                        v-model="employee.email"
-                        placeholder="Masukkan Email"
-                        class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
-                    />
-                    <p
-                        v-if="validation.email"
-                        class="text-red-500 text-sm bg-red-100 p-2 rounded-md mt-1"
-                    >
-                        {{ validation.email[0] }}
-                    </p>
-                </div>
-
-                <!-- Status -->
+                <!-- Alamat -->
                 <div>
                     <label class="block text-gray-600 font-medium"
-                        >Status</label
+                        >Alamat</label
                     >
-                    <select
-                        v-model="employee.status"
+                    <textarea
+                        v-model="employee.alamat"
+                        rows="3"
+                        placeholder="Masukkan Alamat"
                         class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
+                    ></textarea>
+                    <p
+                        v-if="validation.alamat"
+                        class="text-red-500 text-sm bg-red-100 p-2 rounded-md mt-1"
                     >
-                        <option value="Aktif">Aktif</option>
-                        <option value="Nonaktif">Nonaktif</option>
-                    </select>
+                        {{ validation.alamat[0] }}
+                    </p>
                 </div>
 
                 <!-- Tombol -->
                 <div class="flex space-x-3">
                     <button
                         type="submit"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
+                        class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200"
                     >
-                        SIMPAN
+                        UPDATE
                     </button>
                     <button
-                        type="reset"
-                        class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-200"
+                        type="button"
+                        class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-200"
                         @click="resetForm"
                     >
                         RESET
@@ -200,20 +186,41 @@ export default {
                 nama_lengkap: "",
                 tempat_lahir: "",
                 tanggal_lahir: "",
-                jenis_kelamin: "Laki-laki",
-                alamat: "",
-                telepon: "",
+                jenis_kelamin: "",
                 email: "",
+                telepon: "",
+                alamat: "",
                 status: "Aktif",
             },
             validation: [],
         };
     },
+    created() {
+        this.getEmployee();
+    },
     methods: {
-        async storeEmployee() {
+        async getEmployee() {
             try {
-                await axios.post(
-                    "http://localhost:8000/api/employee",
+                const response = await axios.get(
+                    `http://localhost:8000/api/employee/${this.$route.params.id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                                "token"
+                            )}`,
+                        },
+                    }
+                );
+                this.employee = response.data;
+            } catch (error) {
+                console.error("Gagal mengambil data karyawan:", error);
+            }
+        },
+
+        async updateEmployee() {
+            try {
+                await axios.put(
+                    `http://localhost:8000/api/employee/${this.$route.params.id}`,
                     this.employee,
                     {
                         headers: {
@@ -224,29 +231,19 @@ export default {
                     }
                 );
 
-                alert("Karyawan berhasil ditambahkan!");
-                this.$router.push({ name: "EmployeeList" });
+                alert("Karyawan berhasil diperbarui!");
+                this.$router.push({ path: "/karyawan" });
             } catch (error) {
                 if (error.response && error.response.data) {
-                    this.validation = error.response.data.errors || {};
+                    this.validation = error.response.data || {};
                 } else {
                     console.error("Error:", error);
                 }
             }
         },
+
         resetForm() {
-            this.employee = {
-                nik: "",
-                nama_lengkap: "",
-                tempat_lahir: "",
-                tanggal_lahir: "",
-                jenis_kelamin: "Laki-laki",
-                alamat: "",
-                telepon: "",
-                email: "",
-                status: "Aktif",
-            };
-            this.validation = [];
+            this.getEmployee();
         },
     },
 };
