@@ -13,10 +13,11 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = Employee::latest()->paginate(5);
+        $employees = Employee::with(['division', 'position'])->latest()->paginate(5);
 
         return new BaseResource(true, 'Daftar karyawan', $employees);
     }
+
 
     public function store(Request $request)
     {
@@ -55,13 +56,14 @@ class EmployeeController extends Controller
 
     public function show($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::with(['division', 'position'])->find($id);
         if (!$employee) {
             return response()->json(['message' => 'Karyawan tidak ditemukan'], 404);
         }
 
         return new BaseResource(true, 'Detail Karyawan', $employee);
     }
+
 
     public function update(Request $request, $id)
     {

@@ -225,7 +225,7 @@ export default {
                 );
 
                 alert("Karyawan berhasil ditambahkan!");
-                this.$router.push({ name: "EmployeeList" });
+                this.$router.push({ name: "Employee" });
             } catch (error) {
                 if (error.response && error.response.data) {
                     this.validation = error.response.data.errors || {};

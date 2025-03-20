@@ -28,4 +28,14 @@ class Employee extends Model
     {
         return $this->hasMany(Job::class, 'karyawan_id');
     }
+
+    public function division()
+    {
+        return $this->hasOneThrough(Division::class, Job::class, 'karyawan_id', 'id', 'id', 'divisi_id');
+    }
+
+    public function position()
+    {
+        return $this->hasOneThrough(Position::class, Job::class, 'karyawan_id', 'id', 'id', 'jabatan_id');
+    }
 }

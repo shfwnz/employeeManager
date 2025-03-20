@@ -7,6 +7,7 @@ import Employee from "../pages/Employee.vue";
 import Logout from "../components/Logout.vue";
 import authMiddleware from "../middleware/auth";
 import EmployeeEdit from "../components/EmployeeEdit.vue";
+import EmployeeList from "../pages/EmployeeList.vue";
 
 const routes = [
     {
@@ -23,11 +24,15 @@ const routes = [
         beforeEnter: authMiddleware,
     },
     {
-        name: "EmployeeList",
+        name: "Employee",
         path: "/karyawan",
         component: Employee,
     },
-
+    {
+        name: "EmployeeList",
+        path: "/karyawan-list",
+        component: EmployeeList,
+    },
     {
         name: "create karyawan",
         path: "/karyawan/create",
