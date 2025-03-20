@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Models\Employee;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BaseResource;
+use App\Models\Division;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Symfony\Contracts\Service\Attribute\Required;
 
 class EmployeeController extends Controller
 {
@@ -17,7 +17,6 @@ class EmployeeController extends Controller
 
         return new BaseResource(true, 'Daftar karyawan', $employees);
     }
-
 
     public function store(Request $request)
     {
@@ -64,7 +63,6 @@ class EmployeeController extends Controller
         return new BaseResource(true, 'Detail Karyawan', $employee);
     }
 
-
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -103,5 +101,41 @@ class EmployeeController extends Controller
         $employee->delete();
 
         return new BaseResource(true, 'Data Karyawan berhasil dihapus', $employee);
+    }
+
+    // Method untuk mendapatkan jumlah karyawan
+    public function getTotalEmployees()
+    {
+        $totalEmployees = Employee::count();
+        return new BaseResource(true, 'Total jumlah karyawan', $totalEmployees);
+    }
+
+    // Method untuk mendapatkan jumlah karyawan berdasarkan status
+    public function getEmployeesByStatus()
+    {
+        $activeEmployees = Employee::where('status', 'Aktif')->count();
+        $inactiveEmployees = Employee::where('status', 'Nonaktif')->count();
+
+        return new BaseResource(true, 'Jumlah karyawan berdasarkan status', [
+            'Aktif' => $activeEmployees,
+            'Nonaktif' => $inactiveEmployees
+        ]);
+    }
+
+    // Method untuk memfilter jumlah karyawan berdasarkan divisi
+    public function getEmployeesByDivision(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'division_id' => 'required|exists:divisions,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $divisionId = $request->division_id;
+        $employeesCount = Employee::where('division_id', $divisionId)->count();
+
+        return new BaseResource(true, 'Jumlah karyawan berdasarkan divisi', $employeesCount);
     }
 }

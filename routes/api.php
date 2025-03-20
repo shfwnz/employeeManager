@@ -14,6 +14,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('/employee', EmployeeController::class);
+Route::get('/employee/total', [EmployeeController::class, 'getTotalEmployees']);
+Route::get('/employee/status', [EmployeeController::class, 'getEmployeesByStatus']);
+Route::get('/employee/division', [EmployeeController::class, 'getEmployeesByDivision']);
 Route::apiResource('/division', DivisionController::class);
+Route::get('/divisions', [DivisionController::class, 'index']);
 Route::apiResource('/position', PositionController::class);
 Route::apiResource('/job', JobController::class);
