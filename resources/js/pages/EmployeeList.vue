@@ -1,78 +1,159 @@
 <template>
     <div>
-        <h1>Daftar Karyawan</h1>
-        <router-link to="/employee/create">Tambah Karyawan</router-link>
+        <h1>Data Karyawan</h1>
+        <button @click="showModal = true">Tambah Karyawan</button>
 
-        <table border="1">
+        <table>
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>NIK</th>
                     <th>Nama</th>
                     <th>Divisi</th>
                     <th>Jabatan</th>
-                    <th>Status</th>
-                    <th>Gaji</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-if="employees.length === 0">
-                    <td colspan="6" style="text-align: center">
-                        Tidak ada data karyawan
-                    </td>
-                </tr>
                 <tr v-for="employee in employees" :key="employee.id">
                     <td>{{ employee.id }}</td>
+                    <td>{{ employee.nik }}</td>
                     <td>{{ employee.nama_lengkap }}</td>
-                    <td>{{ employee.nama_divisi || "N/A" }}</td>
-                    <td>{{ employee.nama_jabatan || "N/A" }}</td>
-                    <td>{{ employee.status }}</td>
-                    <td>{{ formatCurrency(employee.gaji) }}</td>
+                    <td>
+                        <span v-if="employee.jobs.length">
+                            <span
+                                v-for="(job, index) in employee.jobs"
+                                :key="index"
+                            >
+                                {{ job.division?.nama_divisi || "-" }}
+                                <span v-if="index !== employee.jobs.length - 1"
+                                    >,
+                                </span>
+                            </span>
+                        </span>
+                        <span v-else>-</span>
+                    </td>
+                    <td>
+                        <span v-if="employee.jobs.length">
+                            <span
+                                v-for="(job, index) in employee.jobs"
+                                :key="index"
+                            >
+                                {{ job.position?.nama_jabatan || "-" }}
+                                <span v-if="index !== employee.jobs.length - 1"
+                                    >,
+                                </span>
+                            </span>
+                        </span>
+                        <span v-else>-</span>
+                    </td>
+
+                    <td>
+                        <button @click="editEmployee(employee)">Edit</button>
+                        <button @click="deleteEmployee(employee.id)">
+                            Hapus
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
+
+        <div v-if="showModal">
+            <form @submit.prevent="saveEmployee">
+                <input v-model="form.nik" placeholder="NIK" required />
+                <input
+                    v-model="form.nama_lengkap"
+                    placeholder="Nama Lengkap"
+                    required
+                />
+                <input v-model="form.alamat" placeholder="Alamat" required />
+                <select v-model="form.jenis_kelamin">
+                    <option value="Laki-laki">Laki-laki</option>
+                    <option value="Perempuan">Perempuan</option>
+                </select>
+                <button type="submit">Simpan</button>
+                <button @click="showModal = false">Batal</button>
+            </form>
+        </div>
     </div>
 </template>
 
 <script>
-import axios from "axios";
+import employeeService from "@/services/employeeService";
 
 export default {
     data() {
         return {
             employees: [],
+            showModal: false,
+            form: {
+                nik: "",
+                nama_lengkap: "",
+                alamat: "",
+                jenis_kelamin: "Laki-laki",
+            },
         };
-    },
-    mounted() {
-        this.fetchEmployees();
     },
     methods: {
         async fetchEmployees() {
             try {
-                const token = localStorage.getItem("token");
-                const response = await axios.get(
-                    "http://127.0.0.1:8000/api/employee",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
-                console.log("API Response:", response.data);
-                this.employees = response.data.data || [];
+                const response = await employeeService.getEmployees();
+                this.employees = response.data.data;
             } catch (error) {
-                console.error(
-                    "Error fetching data:",
-                    error.response || error.message
-                );
+                console.error("Error fetching employees:", error);
             }
         },
-
-        formatCurrency(value) {
-            return new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-            }).format(value);
+        async saveEmployee() {
+            try {
+                if (this.form.id) {
+                    await employeeService.updateEmployee(
+                        this.form.id,
+                        this.form
+                    );
+                } else {
+                    await employeeService.createEmployee(this.form);
+                }
+                this.showModal = false;
+                this.fetchEmployees();
+            } catch (error) {
+                console.error("Error saving employee:", error);
+            }
         },
+        editEmployee(employee) {
+            this.form = { ...employee };
+            this.showModal = true;
+        },
+        async deleteEmployee(id) {
+            if (confirm("Yakin ingin menghapus?")) {
+                try {
+                    await employeeService.deleteEmployee(id);
+                    this.fetchEmployees();
+                } catch (error) {
+                    console.error("Error deleting employee:", error);
+                }
+            }
+        },
+    },
+    mounted() {
+        this.fetchEmployees();
     },
 };
 </script>
+
+<style scoped>
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+button {
+    margin-right: 5px;
+}
+</style>
