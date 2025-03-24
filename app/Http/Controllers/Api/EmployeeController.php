@@ -15,9 +15,10 @@ class EmployeeController extends Controller
     {
         $query = Employee::with(['jobs', 'division', 'position']);
 
-        // Filter berdasarkan division_id jika ada
         if ($request->has('division_id')) {
-            $query->where('division_id', $request->division_id);
+            $query->whereHas('jobs', function ($q) use ($request) {
+                $q->where('divisi_id', $request->division_id);
+            });
         }
 
         $employees = $query->latest()->paginate(5);
