@@ -30,9 +30,11 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('/job', JobController::class);
 
     // Endpoint untuk statistik karyawan
-    Route::get('/employees/total', [EmployeeController::class, 'getTotalEmployees']);
-    Route::get('/employees/status', [EmployeeController::class, 'getEmployeesByStatus']);
-    Route::get('/employees/division', [EmployeeController::class, 'getEmployeesByDivision']);
+    Route::prefix('employees')->group(function () {
+        Route::get('/total', [EmployeeController::class, 'getTotalEmployees']);
+        Route::get('/status', [EmployeeController::class, 'getEmployeesByStatus']);
+        Route::get('/division', [EmployeeController::class, 'getEmployeesByDivision']);
+    });
 });
 
 // Endpoint untuk mendapatkan daftar divisi (tanpa autentikasi)

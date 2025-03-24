@@ -1,3 +1,5 @@
+<template></template>
+
 <script>
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";

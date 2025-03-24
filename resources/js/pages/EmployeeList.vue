@@ -44,33 +44,45 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(employee, index) in employees" :key="employee.id">
+                <tr
+                    v-for="(employee, index) in employees"
+                    :key="employee?.id || index"
+                >
                     <td class="border border-gray-300 px-4 py-2">
                         {{ index + 1 }}
                     </td>
                     <td class="border border-gray-300 px-4 py-2">
-                        {{ employee.nama_lengkap }}
+                        {{ employee?.nama_lengkap || "Tidak tersedia" }}
                     </td>
                     <td class="border border-gray-300 px-4 py-2">
                         {{
-                            employee.division?.nama_divisi || "Tidak ada divisi"
+                            employee?.division?.nama_divisi ||
+                            "Tidak ada divisi"
                         }}
                     </td>
                     <td class="border border-gray-300 px-4 py-2">
                         {{
-                            employee.position?.nama_jabatan ||
+                            employee?.position?.nama_jabatan ||
                             "Tidak ada jabatan"
                         }}
                     </td>
                     <td
                         class="border border-gray-300 px-4 py-2"
                         :class="
-                            employee.status === 'Aktif'
+                            employee?.status === 'Aktif'
                                 ? 'text-green-600'
                                 : 'text-red-600'
                         "
                     >
-                        {{ employee.status }}
+                        {{ employee?.status || "Tidak tersedia" }}
+                    </td>
+                </tr>
+                <tr v-if="employees.length === 0 && !loading">
+                    <td
+                        colspan="5"
+                        class="border border-gray-300 px-4 py-2 text-center"
+                    >
+                        Tidak ada data karyawan
                     </td>
                 </tr>
             </tbody>
@@ -108,24 +120,53 @@ export default {
     methods: {
         async fetchStatistics() {
             this.loading = true;
+            this.error = null;
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                this.error = "Token tidak ditemukan. Silakan login kembali.";
+                this.loading = false;
+                return;
+            }
+
             try {
                 const totalResponse = await axios.get(
-                    "http://127.0.0.1:8000/api/employee/total"
+                    "http://127.0.0.1:8000/api/employees/total",
+                    {
+                        headers: {
+                            Accept: "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
                 );
                 this.statistics.total = totalResponse.data.data;
 
                 const statusResponse = await axios.get(
-                    "http://127.0.0.1:8000/api/employee/status"
+                    "http://127.0.0.1:8000/api/employees/status",
+                    {
+                        headers: {
+                            Accept: "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
                 );
-                this.statistics.aktif = statusResponse.data.data.Aktif;
-                this.statistics.nonaktif = statusResponse.data.data.Nonaktif;
+                this.statistics.aktif = statusResponse.data.data.Aktif || 0;
+                this.statistics.nonaktif =
+                    statusResponse.data.data.Nonaktif || 0;
 
                 const divisionsResponse = await axios.get(
-                    "http://127.0.0.1:8000/api/divisions"
+                    "http://127.0.0.1:8000/api/division",
+                    {
+                        headers: {
+                            Accept: "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
                 );
-                this.statistics.divisions = divisionsResponse.data.data;
+                this.statistics.divisions = divisionsResponse.data.data || [];
             } catch (err) {
-                this.error = err.message;
+                console.error("Error fetching statistics:", err);
+                this.error = err.message || "Gagal memuat statistik";
             } finally {
                 this.loading = false;
             }
@@ -133,16 +174,34 @@ export default {
 
         async fetchEmployees() {
             this.loading = true;
+            this.error = null;
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                this.error = "Token tidak ditemukan. Silakan login kembali.";
+                this.loading = false;
+                return;
+            }
+
             let url = "http://127.0.0.1:8000/api/employee";
             if (this.selectedDivision) {
                 url += `?division_id=${this.selectedDivision}`;
             }
 
             try {
-                const response = await axios.get(url);
-                this.employees = response.data.data.data;
+                const response = await axios.get(url, {
+                    headers: {
+                        Accept: "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                // Safely access the data with optional chaining
+                this.employees = response.data?.data?.data || [];
             } catch (err) {
-                this.error = err.message;
+                console.error("Error fetching employees:", err);
+                this.error = err.message || "Gagal memuat data karyawan";
+                this.employees = [];
             } finally {
                 this.loading = false;
             }
