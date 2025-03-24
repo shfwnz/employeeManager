@@ -12,7 +12,6 @@ export default {
             router.push("/login");
         };
 
-        // Jalankan logout otomatis saat halaman diakses
         onMounted(() => {
             logout();
         });
