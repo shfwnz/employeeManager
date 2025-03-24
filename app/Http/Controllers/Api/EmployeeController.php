@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
+    // Get employees list
     public function index(Request $request)
     {
         $query = Employee::select(
@@ -25,15 +26,18 @@ class EmployeeController extends Controller
             ->leftJoin('divisi', 'pekerjaan.divisi_id', '=', 'divisi.id')
             ->leftJoin('jabatan', 'pekerjaan.jabatan_id', '=', 'jabatan.id');
 
+        // Filter by division
         if ($request->has('division_id')) {
             $query->where('pekerjaan.divisi_id', $request->division_id);
         }
 
-        return new BaseResource(true, 'Daftar karyawan', $query->paginate(5));
+        return new BaseResource(true, 'Employee list', $query->paginate(5));
     }
 
+    // Store new employee
     public function store(Request $request)
     {
+        // Validate input
         $validator = Validator::make($request->all(), [
             'nik' => 'required|unique:karyawan,nik',
             'nama_lengkap' => 'required|string|max:255',
@@ -47,49 +51,40 @@ class EmployeeController extends Controller
             'status' => 'nullable|in:Aktif,Nonaktif'
         ]);
 
+        // Validation failed
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        // Handle upload foto
-        $fotoPath = null;
-        if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('uploads/karyawan', 'public');
-        }
+        // Upload photo
+        $fotoPath = $request->hasFile('foto') ? $request->file('foto')->store('uploads/karyawan', 'public') : null;
 
-        $employee = Employee::create([
-            'nik' => $request->nik,
-            'nama_lengkap' => $request->nama_lengkap,
-            'tempat_lahir' => $request->tempat_lahir,
-            'tanggal_lahir' => $request->tanggal_lahir,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'alamat' => $request->alamat,
-            'telepon' => $request->telepon,
-            'email' => $request->email,
-            'foto' => $fotoPath,
-            'status' => $request->status ?? 'Aktif'
-        ]);
+        // Create employee
+        $employee = Employee::create(array_merge($request->all(), ['foto' => $fotoPath, 'status' => $request->status ?? 'Aktif']));
 
-        return new BaseResource(true, 'Data karyawan ditambahkan', $employee);
+        return new BaseResource(true, 'Employee added', $employee);
     }
 
+    // Get employee by ID
     public function show($id)
     {
         $employee = Employee::with(['jobs', 'division', 'position'])->find($id);
         if (!$employee) {
-            return response()->json(['message' => 'Karyawan tidak ditemukan'], 404);
+            return response()->json(['message' => 'Employee not found'], 404);
         }
 
-        return new BaseResource(true, 'Detail Karyawan', $employee);
+        return new BaseResource(true, 'Employee details', $employee);
     }
 
+    // Update employee by ID
     public function update(Request $request, $id)
     {
         $employee = Employee::find($id);
         if (!$employee) {
-            return response()->json(['message' => 'Karyawan tidak ditemukan'], 404);
+            return response()->json(['message' => 'Employee not found'], 404);
         }
 
+        // Validate input
         $validator = Validator::make($request->all(), [
             'nik' => "sometimes|required|unique:karyawan,nik,$id",
             'nama_lengkap' => 'sometimes|required|string|max:255',
@@ -103,11 +98,12 @@ class EmployeeController extends Controller
             'status' => 'nullable|in:Aktif,Nonaktif'
         ]);
 
+        // Validation failed
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        // Handle upload foto baru
+        // Upload new photo
         if ($request->hasFile('foto')) {
             if ($employee->foto) {
                 Storage::disk('public')->delete($employee->foto);
@@ -115,45 +111,53 @@ class EmployeeController extends Controller
             $employee->foto = $request->file('foto')->store('uploads/karyawan', 'public');
         }
 
+        // Update data
         $employee->update($request->except('foto'));
 
-        return new BaseResource(true, 'Data Karyawan berhasil diupdate', $employee);
+        return new BaseResource(true, 'Employee updated', $employee);
     }
 
+    // Delete employee by ID
     public function destroy($id)
     {
         $employee = Employee::find($id);
         if (!$employee) {
-            return response()->json(['message' => 'Karyawan tidak ditemukan'], 404);
+            return response()->json(['message' => 'Employee not found'], 404);
         }
 
+        // Delete photo if exists
         if ($employee->foto) {
             Storage::disk('public')->delete($employee->foto);
         }
 
+        // Delete employee
         $employee->delete();
-        return new BaseResource(true, 'Data Karyawan berhasil dihapus', $employee);
+        return new BaseResource(true, 'Employee deleted', $employee);
     }
 
+    // Get total employees
     public function getTotalEmployees()
     {
         $totalEmployees = Employee::count();
-        return new BaseResource(true, 'Total jumlah karyawan', $totalEmployees);
+        return new BaseResource(true, 'Total employees', $totalEmployees);
     }
 
+    // Get employees by status
     public function getEmployeesByStatus()
     {
         $activeEmployees = Employee::where('status', 'Aktif')->count();
         $inactiveEmployees = Employee::where('status', 'Nonaktif')->count();
 
-        return new BaseResource(true, 'Jumlah karyawan berdasarkan status', [
-            'Aktif' => $activeEmployees,
-            'Nonaktif' => $inactiveEmployees
+        return new BaseResource(true, 'Employees by status', [
+            'Active' => $activeEmployees,
+            'Inactive' => $inactiveEmployees
         ]);
     }
 
+    // Get employees by division
     public function getEmployeesByDivision(Request $request)
     {
+        // Validate request
         $validator = Validator::make($request->all(), [
             'division_id' => 'required|exists:divisi,id'
         ]);
@@ -162,10 +166,11 @@ class EmployeeController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
+        // Count employees by division
         $employees = Employee::whereHas('jobs', function ($query) use ($request) {
             $query->where('divisi_id', $request->division_id);
         })->count();
 
-        return new BaseResource(true, 'Jumlah karyawan berdasarkan divisi', $employees);
+        return new BaseResource(true, 'Employees by division', $employees);
     }
 }
