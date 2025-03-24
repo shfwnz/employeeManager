@@ -103,12 +103,14 @@ export default {
             axios
                 .get("http://localhost:8000/api/employee")
                 .then((response) => {
+                    console.log("API Response:", response.data.data.data); // Debugging
                     this.employees = response.data.data.data;
                 })
                 .catch((error) => {
                     console.error("Error fetching employees:", error);
                 });
         },
+
         deleteEmployee(id, index) {
             if (confirm("Apakah Anda yakin ingin menghapus karyawan ini?")) {
                 axios

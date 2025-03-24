@@ -16,7 +16,11 @@ class EmployeeController extends Controller
     {
         $query = Employee::select(
             'karyawan.id',
+            'karyawan.nik',
             'karyawan.nama_lengkap',
+            'karyawan.email',
+            'karyawan.telepon',
+            'karyawan.alamat',
             'karyawan.status',
             'divisi.nama_divisi',
             'jabatan.nama_jabatan',
