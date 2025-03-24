@@ -34,7 +34,7 @@ class EmployeeController extends Controller
         return new BaseResource(true, 'Employee list', $query->paginate(5));
     }
 
-    // Store new employee
+    // add new employee
     public function store(Request $request)
     {
         // Validate input
