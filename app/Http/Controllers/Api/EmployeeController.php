@@ -13,16 +13,23 @@ class EmployeeController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Employee::with(['jobs', 'division', 'position']);
+        $query = Employee::select(
+            'karyawan.id',
+            'karyawan.nama_lengkap',
+            'karyawan.status',
+            'divisi.nama_divisi',
+            'jabatan.nama_jabatan',
+            'pekerjaan.tanggal_bergabung'
+        )
+            ->leftJoin('pekerjaan', 'karyawan.id', '=', 'pekerjaan.karyawan_id')
+            ->leftJoin('divisi', 'pekerjaan.divisi_id', '=', 'divisi.id')
+            ->leftJoin('jabatan', 'pekerjaan.jabatan_id', '=', 'jabatan.id');
 
         if ($request->has('division_id')) {
-            $query->whereHas('jobs', function ($q) use ($request) {
-                $q->where('divisi_id', $request->division_id);
-            });
+            $query->where('pekerjaan.divisi_id', $request->division_id);
         }
 
-        $employees = $query->latest()->paginate(5);
-        return new BaseResource(true, 'Daftar karyawan', $employees);
+        return new BaseResource(true, 'Daftar karyawan', $query->paginate(5));
     }
 
     public function store(Request $request)

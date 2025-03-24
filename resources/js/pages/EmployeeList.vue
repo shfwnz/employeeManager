@@ -40,6 +40,9 @@
                     <th class="border border-gray-300 px-4 py-2">Nama</th>
                     <th class="border border-gray-300 px-4 py-2">Divisi</th>
                     <th class="border border-gray-300 px-4 py-2">Jabatan</th>
+                    <th class="border border-gray-300 px-4 py-2">
+                        Tanggal Bergabung
+                    </th>
                     <th class="border border-gray-300 px-4 py-2">Status</th>
                 </tr>
             </thead>
@@ -55,15 +58,18 @@
                         {{ employee?.nama_lengkap || "Tidak tersedia" }}
                     </td>
                     <td class="border border-gray-300 px-4 py-2">
-                        {{
-                            employee?.division?.nama_divisi ||
-                            "Tidak ada divisi"
-                        }}
+                        {{ employee?.nama_divisi || "Tidak ada divisi" }}
+                    </td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        {{ employee?.nama_jabatan || "Tidak ada jabatan" }}
                     </td>
                     <td class="border border-gray-300 px-4 py-2">
                         {{
-                            employee?.position?.nama_jabatan ||
-                            "Tidak ada jabatan"
+                            employee?.tanggal_bergabung
+                                ? new Date(
+                                      employee.tanggal_bergabung
+                                  ).toLocaleDateString()
+                                : "Tidak tersedia"
                         }}
                     </td>
                     <td
