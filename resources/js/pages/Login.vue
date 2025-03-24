@@ -1,18 +1,32 @@
 <template>
     <div>
-        <h2>Login</h2>
+        <h2 class="font-semibold text-center mb-4 p-4">Login</h2>
         <form @submit.prevent="login">
             <div>
                 <label>Email:</label>
-                <input v-model="email" type="email" required />
+                <input
+                    class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    v-model="email"
+                    type="email"
+                    required
+                />
             </div>
 
             <div>
                 <label>Password:</label>
-                <input v-model="password" type="password" required />
+                <input
+                    class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    v-model="password"
+                    type="password"
+                    required
+                />
             </div>
 
-            <button type="submit">Login</button>
+            <button
+                class="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+            >
+                Login
+            </button>
         </form>
     </div>
 </template>
