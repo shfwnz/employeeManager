@@ -12,30 +12,29 @@ use App\Http\Controllers\Api\DivisionController;
 use App\Http\Controllers\Api\PositionController;
 use App\Http\Controllers\Api\JobController;
 
+// Auth
 Route::post('/register', RegisterController::class)->name('register');
 Route::post('/login', LoginController::class)->name('login');
 Route::post('/logout', LogoutController::class)->name('logout');
 
-// Endpoint yang memerlukan autentikasi
+// Security
 Route::middleware('auth:api')->group(function () {
-    // Mendapatkan data pengguna yang sedang login
+    // Get user login
+    // api/user
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
-    // Endpoint untuk resource
+    // Resource
     Route::apiResource('/employee', EmployeeController::class);
     Route::apiResource('/division', DivisionController::class);
     Route::apiResource('/position', PositionController::class);
     Route::apiResource('/job', JobController::class);
 
-    // Endpoint untuk statistik karyawan
+    // Statistic Employees
     Route::prefix('employees')->group(function () {
         Route::get('/total', [EmployeeController::class, 'getTotalEmployees']);
         Route::get('/status', [EmployeeController::class, 'getEmployeesByStatus']);
         Route::get('/division', [EmployeeController::class, 'getEmployeesByDivision']);
     });
 });
-
-// Endpoint untuk mendapatkan daftar divisi (tanpa autentikasi)
-Route::get('/divisions', [DivisionController::class, 'index']);
