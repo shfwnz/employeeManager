@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../components/Home.vue";
 import EmployeeForm from "../components/EmployeeForm.vue";
-import Login from "../pages/Login.vue";
-import Register from "../pages/Register.vue";
+import Login from "../pages/auth/Login.vue";
+import Register from "../pages/auth/Register.vue";
 import Employee from "../pages/Employee.vue";
-import Logout from "../components/Logout.vue";
+import Logout from "../pages/auth/Logout.vue";
 import authMiddleware from "../middleware/auth";
 import EmployeeEdit from "../components/EmployeeEdit.vue";
 import EmployeeList from "../pages/EmployeeList.vue";
