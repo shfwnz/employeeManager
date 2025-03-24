@@ -64,41 +64,39 @@ class DivisionController extends Controller
             'deskripsi' => 'sometimes|required|string|max:255'
         ]);
 
-        // Jika validasi gagal, kembalikan response dengan status 422 (Unprocessable Entity)
+        // is fail?
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        // Mencari divisi berdasarkan ID
+        // find id
         $division = Division::find($id);
 
-        // Jika divisi tidak ditemukan, kembalikan response dengan status 404
+        // is exist
         if (!$division) {
             return response()->json(['success' => false, 'message' => 'divisi tidak ditemukan'], 404);
         }
 
-        // Mengupdate data divisi dengan data dari request
+        // update all data
         $division->update($request->all());
 
-        // Mengembalikan response sukses setelah update
         return new BaseResource(true, 'Data divisi berhasil diupdate', $division);
     }
 
-    // Method untuk menghapus divisi berdasarkan ID
+    // delete by id
     public function destroy($id)
     {
-        // Mencari divisi berdasarkan ID
+        // find id
         $division = Division::find($id);
 
-        // Jika divisi tidak ditemukan, kembalikan response dengan status 404
+        // is exist
         if (!$division) {
             return response()->json(['success' => false, 'message' => 'divisi tidak ditemukan'], 404);
         }
 
-        // Menghapus data divisi dari database
+        // delete 
         $division->delete();
 
-        // Mengembalikan response sukses setelah divisi dihapus
         return new BaseResource(true, 'Data divisi berhasil dihapus', $division);
     }
 }
