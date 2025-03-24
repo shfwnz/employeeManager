@@ -26,10 +26,10 @@
             <option value="">Semua Divisi</option>
             <option
                 v-for="div in statistics.divisions"
-                :key="div.id"
-                :value="div.id"
+                :key="div?.id"
+                :value="div?.id"
             >
-                {{ div.nama_divisi }}
+                {{ div?.nama_divisi || "Divisi Tidak Diketahui" }}
             </option>
         </select>
 
@@ -163,7 +163,9 @@ export default {
                         },
                     }
                 );
-                this.statistics.divisions = divisionsResponse.data.data || [];
+                this.statistics.divisions = (
+                    divisionsResponse.data.data.data || []
+                ).sort((a, b) => a.nama_divisi.localeCompare(b.nama_divisi));
             } catch (err) {
                 console.error("Error fetching statistics:", err);
                 this.error = err.message || "Gagal memuat statistik";
@@ -196,8 +198,12 @@ export default {
                     },
                 });
 
-                // Safely access the data with optional chaining
+                console.log("Response Employees:", response.data); // Debugging log
+
+                // Pastikan response memiliki data yang sesuai
                 this.employees = response.data?.data?.data || [];
+
+                console.log("Employees State:", this.employees); // Debugging log
             } catch (err) {
                 console.error("Error fetching employees:", err);
                 this.error = err.message || "Gagal memuat data karyawan";

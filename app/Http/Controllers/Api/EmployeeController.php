@@ -11,9 +11,16 @@ use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $employees = Employee::with(['jobs', 'division', 'position'])->latest()->paginate(5);
+        $query = Employee::with(['jobs', 'division', 'position']);
+
+        // Filter berdasarkan division_id jika ada
+        if ($request->has('division_id')) {
+            $query->where('division_id', $request->division_id);
+        }
+
+        $employees = $query->latest()->paginate(5);
         return new BaseResource(true, 'Daftar karyawan', $employees);
     }
 
