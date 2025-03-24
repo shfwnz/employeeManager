@@ -1,5 +1,6 @@
 <script>
 import { useRouter } from "vue-router";
+import { onMounted } from "vue";
 
 export default {
     setup() {
@@ -7,15 +8,14 @@ export default {
 
         const logout = () => {
             localStorage.removeItem("token");
-            if (!localStorage.getItem("token")) {
-                alert("Logout berhasil!");
-                router.push("/login");
-                return true;
-            } else {
-                alert("Gagal logout!");
-                return false;
-            }
+            alert("Logout berhasil!");
+            router.push("/login");
         };
+
+        // Jalankan logout otomatis saat halaman diakses
+        onMounted(() => {
+            logout();
+        });
 
         return { logout };
     },

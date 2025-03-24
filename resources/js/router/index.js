@@ -17,6 +17,7 @@ const routes = [
     {
         path: "/register",
         component: Register,
+        beforeEnter: authMiddleware,
     },
     {
         path: "/logout",
@@ -27,30 +28,36 @@ const routes = [
         name: "Employee",
         path: "/karyawan",
         component: Employee,
+        beforeEnter: authMiddleware,
     },
     {
         name: "EmployeeList",
         path: "/karyawan-pekerjaan",
         component: EmployeeList,
+        beforeEnter: authMiddleware,
     },
     {
         name: "create karyawan",
         path: "/karyawan/create",
         component: EmployeeForm,
+        beforeEnter: authMiddleware,
     },
     {
         name: "edit karyawan",
         path: "/karyawan/edit/:id",
         component: EmployeeEdit,
+        beforeEnter: authMiddleware,
     },
     {
         name: "tambah pekerjaan",
         path: "/karyawan-pekerjaan/add",
         component: EmployeeEdit,
+        beforeEnter: authMiddleware,
     },
     {
         path: "/",
         component: Home,
+        beforeEnter: authMiddleware,
     },
 ];
 
