@@ -9,9 +9,10 @@ export default {
         const router = useRouter();
 
         const logout = () => {
+            // Remove token
             localStorage.removeItem("token");
             alert("Logout berhasil!");
-            router.push("/login");
+            router.push("/login"); // Redirect
         };
 
         onMounted(() => {
