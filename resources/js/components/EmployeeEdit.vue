@@ -1,12 +1,13 @@
 <template>
     <div class="max-w-4xl mx-auto p-6">
         <div class="bg-white shadow-lg rounded-lg p-6">
+            <!-- Form Title -->
             <h2 class="text-2xl font-semibold text-gray-700 mb-4">
                 EDIT KARYAWAN
             </h2>
 
             <form @submit.prevent="updateEmployee" class="space-y-4">
-                <!-- NIK -->
+                <!-- NIK Input -->
                 <div>
                     <label class="block text-gray-600 font-medium">NIK</label>
                     <input
@@ -15,6 +16,7 @@
                         placeholder="Masukkan NIK"
                         class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
                     />
+                    <!-- Validation Message -->
                     <p
                         v-if="validation.nik"
                         class="text-red-500 text-sm bg-red-100 p-2 rounded-md mt-1"
@@ -23,7 +25,7 @@
                     </p>
                 </div>
 
-                <!-- Nama Lengkap -->
+                <!-- Nama Lengkap Input -->
                 <div>
                     <label class="block text-gray-600 font-medium"
                         >Nama Lengkap</label
@@ -34,6 +36,7 @@
                         placeholder="Masukkan Nama Lengkap"
                         class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
                     />
+                    <!-- Validation Message -->
                     <p
                         v-if="validation.nama_lengkap"
                         class="text-red-500 text-sm bg-red-100 p-2 rounded-md mt-1"
@@ -42,7 +45,7 @@
                     </p>
                 </div>
 
-                <!-- Tempat Lahir -->
+                <!-- Tempat Lahir Input -->
                 <div>
                     <label class="block text-gray-600 font-medium"
                         >Tempat Lahir</label
@@ -53,6 +56,7 @@
                         placeholder="Masukkan Tempat Lahir"
                         class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
                     />
+                    <!-- Validation Message -->
                     <p
                         v-if="validation.tempat_lahir"
                         class="text-red-500 text-sm bg-red-100 p-2 rounded-md mt-1"
@@ -61,7 +65,7 @@
                     </p>
                 </div>
 
-                <!-- Tanggal Lahir -->
+                <!-- Tanggal Lahir Input -->
                 <div>
                     <label class="block text-gray-600 font-medium"
                         >Tanggal Lahir</label
@@ -71,6 +75,7 @@
                         v-model="employee.tanggal_lahir"
                         class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
                     />
+                    <!-- Validation Message -->
                     <p
                         v-if="validation.tanggal_lahir"
                         class="text-red-500 text-sm bg-red-100 p-2 rounded-md mt-1"
@@ -91,6 +96,7 @@
                         <option value="Laki-laki">Laki-laki</option>
                         <option value="Perempuan">Perempuan</option>
                     </select>
+                    <!-- Validation Message -->
                     <p
                         v-if="validation.jenis_kelamin"
                         class="text-red-500 text-sm bg-red-100 p-2 rounded-md mt-1"
@@ -99,7 +105,7 @@
                     </p>
                 </div>
 
-                <!-- Email -->
+                <!-- Email Input -->
                 <div>
                     <label class="block text-gray-600 font-medium">Email</label>
                     <input
@@ -108,6 +114,7 @@
                         placeholder="Masukkan Email"
                         class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
                     />
+                    <!-- Validation Message -->
                     <p
                         v-if="validation.email"
                         class="text-red-500 text-sm bg-red-100 p-2 rounded-md mt-1"
@@ -116,7 +123,7 @@
                     </p>
                 </div>
 
-                <!-- Telepon -->
+                <!-- Telepon Input -->
                 <div>
                     <label class="block text-gray-600 font-medium"
                         >Telepon</label
@@ -127,6 +134,7 @@
                         placeholder="Masukkan Nomor Telepon"
                         class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
                     />
+                    <!-- Validation Message -->
                     <p
                         v-if="validation.telepon"
                         class="text-red-500 text-sm bg-red-100 p-2 rounded-md mt-1"
@@ -135,7 +143,7 @@
                     </p>
                 </div>
 
-                <!-- Alamat -->
+                <!-- Alamat Input -->
                 <div>
                     <label class="block text-gray-600 font-medium"
                         >Alamat</label
@@ -146,6 +154,7 @@
                         placeholder="Masukkan Alamat"
                         class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
                     ></textarea>
+                    <!-- Validation Message -->
                     <p
                         v-if="validation.alamat"
                         class="text-red-500 text-sm bg-red-100 p-2 rounded-md mt-1"
@@ -154,7 +163,7 @@
                     </p>
                 </div>
 
-                <!-- Tombol -->
+                <!-- Action Buttons -->
                 <div class="flex space-x-3">
                     <button
                         type="submit"
@@ -181,6 +190,7 @@ import axios from "axios";
 export default {
     data() {
         return {
+            // data
             employee: {
                 nik: "",
                 nama_lengkap: "",
@@ -192,6 +202,7 @@ export default {
                 alamat: "",
                 status: "Aktif",
             },
+            // Validation error messages
             validation: [],
         };
     },
@@ -199,6 +210,7 @@ export default {
         this.getEmployee();
     },
     methods: {
+        // Fetch employee data
         async getEmployee() {
             try {
                 const response = await axios.get(
@@ -217,6 +229,7 @@ export default {
             }
         },
 
+        // Update employee data
         async updateEmployee() {
             try {
                 await axios.put(
@@ -242,6 +255,7 @@ export default {
             }
         },
 
+        // Reset form to initial state
         resetForm() {
             this.getEmployee();
         },
