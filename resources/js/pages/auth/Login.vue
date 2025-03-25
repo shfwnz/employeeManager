@@ -43,8 +43,8 @@ import axios from "axios";
 export default {
     data() {
         return {
-            email: "", // User email
-            password: "", // User password
+            email: "",
+            password: "",
         };
     },
     methods: {
@@ -61,7 +61,7 @@ export default {
 
                 // Check if token exists
                 if (response.data && response.data.token) {
-                    localStorage.setItem("token", response.data.token); // Store token
+                    localStorage.setItem("token", response.data.token); // set token
 
                     // Set authorization header
                     axios.defaults.headers.common[
@@ -69,7 +69,7 @@ export default {
                     ] = `Bearer ${response.data.token}`;
 
                     alert("Login Berhasil!");
-                    this.$router.push("/karyawan"); // Redirect to employee page
+                    this.$router.push("/"); // Redirect
                 } else {
                     alert("Token not found");
                     throw new Error("Token missing in response.");
