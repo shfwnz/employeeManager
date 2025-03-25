@@ -23,6 +23,9 @@
                                 Nama Lengkap
                             </th>
                             <th class="border border-gray-300 px-4 py-2">
+                                Jenis Kelamin
+                            </th>
+                            <th class="border border-gray-300 px-4 py-2">
                                 Email
                             </th>
                             <th class="border border-gray-300 px-4 py-2">
@@ -47,6 +50,9 @@
                             </td>
                             <td class="border border-gray-300 px-4 py-2">
                                 {{ employee.nama_lengkap }}
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                {{ employee.jenis_kelamin }}
                             </td>
                             <td class="border border-gray-300 px-4 py-2">
                                 {{ employee.email }}
