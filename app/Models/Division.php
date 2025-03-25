@@ -9,13 +9,16 @@ class Division extends Model
 {
     use HasFactory;
 
+    // table name
     protected $table = 'divisi';
 
+    // fields
     protected $fillable = [
         'nama_divisi',
         'deskripsi'
     ];
 
+    // one-to-many
     public function jobs()
     {
         return $this->hasMany(Job::class, 'divisi_id');
