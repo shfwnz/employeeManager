@@ -11,19 +11,20 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 
 class LogoutController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
+    // handle logout request
     public function __invoke(Request $request)
     {
         try {
+            // invalidate token
             $removeToken = JWTAuth::invalidate(JWTAuth::getToken());
 
+            // return response
             return response()->json([
                 'success' => true,
                 'message' => 'Logout Berhasil!',
             ]);
         } catch (JWTException $exception) {
+            // logout failed
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal logout, silakan coba lagi!',
