@@ -5,7 +5,7 @@
 
         <!-- Login Form -->
         <form @submit.prevent="login">
-            <div>
+            <div class="py-2">
                 <!-- Email Input -->
                 <label>Email:</label>
                 <input
@@ -16,7 +16,7 @@
                 />
             </div>
 
-            <div>
+            <div class="py-2">
                 <!-- Password Input -->
                 <label>Password:</label>
                 <input
