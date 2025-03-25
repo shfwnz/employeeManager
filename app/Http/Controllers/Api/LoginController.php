@@ -29,7 +29,7 @@ class LoginController extends Controller
         if (!$token = auth()->guard('api')->attempt($credentials)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Incorrect Email or Password'
+                'message' => 'Email atau Password Salah'
             ], 401);
         }
 
