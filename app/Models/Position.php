@@ -9,13 +9,16 @@ class Position extends Model
 {
     use HasFactory;
 
+    // Table name
     protected $table = 'jabatan';
 
+    // Fillable 
     protected $fillable = [
         'nama_jabatan',
         'deskripsi'
     ];
 
+    // One-to-Many
     public function jobs()
     {
         return $this->hasMany(Job::class, 'jabatan_id');

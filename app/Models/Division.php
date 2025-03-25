@@ -12,7 +12,7 @@ class Division extends Model
     // table name
     protected $table = 'divisi';
 
-    // fields
+    // Fillable
     protected $fillable = [
         'nama_divisi',
         'deskripsi'
