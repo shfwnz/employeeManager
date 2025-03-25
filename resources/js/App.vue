@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" class="p-20">
         <Navbar />
         <router-view />
     </div>
@@ -12,10 +12,3 @@ export default {
     components: { Navbar },
 };
 </script>
-
-<style>
-#app {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-}
-</style>
