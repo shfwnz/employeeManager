@@ -156,8 +156,8 @@ class EmployeeController extends Controller
         $inactiveEmployees = Employee::where('status', 'Nonaktif')->count();
 
         return new BaseResource(true, 'Employees by status', [
-            'Active' => $activeEmployees,
-            'Inactive' => $inactiveEmployees
+            'Aktif' => $activeEmployees,
+            'Nonaktif' => $inactiveEmployees
         ]);
     }
 
