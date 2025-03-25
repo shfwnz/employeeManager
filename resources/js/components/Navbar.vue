@@ -11,6 +11,14 @@
             </li>
             <li>
                 <router-link
+                    to="/register"
+                    class="text-white hover:text-black font-medium"
+                >
+                    Register
+                </router-link>
+            </li>
+            <li>
+                <router-link
                     to="/logout"
                     class="text-white hover:text-black font-medium"
                 >

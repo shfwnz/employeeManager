@@ -17,7 +17,6 @@ const routes = [
     {
         path: "/register",
         component: Register,
-        beforeEnter: authMiddleware,
     },
     {
         path: "/logout",
