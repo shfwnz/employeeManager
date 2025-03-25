@@ -4,100 +4,102 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BaseResource;
-use App\Models\Division;
+use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class DivisionController extends Controller
+class JobController extends Controller
 {
-    // get all divisions
+    // job list
     public function index()
     {
-        // get latest divisions
-        $divisions = Division::latest()->paginate(5);
+        $jobs = Job::with([
+            'employee',
+            'division',
+            'position'
+        ])->latest()->paginate(5);
 
-        return new BaseResource(true, 'Daftar divisi', $divisions);
+        return new BaseResource(true, 'Daftar pekerjaan', $jobs);
     }
 
-    // create division
+    // Create a new job
     public function store(Request $request)
     {
-        // validate request
+        // Validate request data
         $validator = Validator::make($request->all(), [
-            'nama_divisi' => 'required|string|max:100',
-            'deskripsi' => 'required|string|max:255'
+            'karyawan_id' => 'required|exists:karyawan,id',
+            'divisi_id' => 'required|exists:divisi,id',
+            'jabatan_id' => 'required|exists:jabatan,id',
+            'tanggal_bergabung' => 'required|date',
+            'gaji' => 'required|numeric|min:0',
         ]);
 
-        // validation failed?
+        // Return validation errors
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        // create division
-        $division = Division::create([
-            'nama_divisi' => $request->nama_divisi,
-            'deskripsi' => $request->deskripsi
+        // Create job record
+        $job = Job::create([
+            'karyawan_id' => $request->karyawan_id,
+            'divisi_id' => $request->divisi_id,
+            'jabatan_id' => $request->jabatan_id,
+            'tanggal_bergabung' => $request->tanggal_bergabung,
+            'gaji' => $request->gaji,
         ]);
 
-        return new BaseResource(true, 'Data divisi ditambahkan', $division);
+        return new BaseResource(true, 'Data pekerjaan ditambahkan', $job);
     }
 
-    // get division by id
+    // Show job details
     public function show($id)
     {
-        // find division
-        $division = Division::find($id);
-
-        // not found?
-        if (!$division) {
-            return response()->json(['success' => false, 'message' => 'divisi tidak ditemukan'], 404);
+        $job = Job::find($id);
+        if (!$job) {
+            return response()->json(['success' => false, 'message' => 'Pekerjaan tidak ditemukan'], 404);
         }
 
-        return new BaseResource(true, 'Detail divisi', $division);
+        return new BaseResource(true, 'Detail pekerjaan', $job);
     }
 
-    // update division
+    // Update job record
     public function update(Request $request, $id)
     {
-        // validate request
+        // Validate request data (optional fields)
         $validator = Validator::make($request->all(), [
-            'nama_divisi' => 'sometimes|required|string|max:100',
-            'deskripsi' => 'sometimes|required|string|max:255'
+            'karyawan_id' => 'sometimes|required|exists:karyawan,id',
+            'divisi_id' => 'sometimes|required|exists:divisi,id',
+            'jabatan_id' => 'sometimes|required|exists:jabatan,id',
+            'tanggal_bergabung' => 'sometimes|required|date',
+            'gaji' => 'sometimes|required|numeric|min:0',
         ]);
 
-        // validation failed?
+        // Return validation errors
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        // find division
-        $division = Division::find($id);
-
-        // not found?
-        if (!$division) {
-            return response()->json(['success' => false, 'message' => 'divisi tidak ditemukan'], 404);
+        // Find by ID
+        $job = Job::find($id);
+        if (!$job) {
+            return response()->json(['success' => false, 'message' => 'Pekerjaan tidak ditemukan'], 404);
         }
 
-        // update division
-        $division->update($request->all());
+        // Update job data
+        $job->update($request->all());
 
-        return new BaseResource(true, 'Data divisi berhasil diupdate', $division);
+        return new BaseResource(true, 'Data Pekerjaan berhasil diupdate', $job);
     }
 
-    // delete division
+    // Delete a job
     public function destroy($id)
     {
-        // find division
-        $division = Division::find($id);
-
-        // not found?
-        if (!$division) {
-            return response()->json(['success' => false, 'message' => 'divisi tidak ditemukan'], 404);
+        $job = Job::find($id);
+        if (!$job) {
+            return response()->json(['success' => false, 'message' => 'Pekerjaan tidak ditemukan'], 404);
         }
+        $job->delete();
 
-        // delete division
-        $division->delete();
-
-        return new BaseResource(true, 'Data divisi berhasil dihapus', $division);
+        return new BaseResource(true, 'Data pekerjaan berhasil dihapus', $job);
     }
 }

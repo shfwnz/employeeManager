@@ -163,6 +163,27 @@
                     </p>
                 </div>
 
+                <!-- Status -->
+                <div>
+                    <label class="block text-gray-600 font-medium"
+                        >Status</label
+                    >
+                    <select
+                        v-model="employee.status"
+                        class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="Aktif">Aktif</option>
+                        <option value="Nonaktif">Nonaktif</option>
+                    </select>
+                    <!-- Validation Message -->
+                    <p
+                        v-if="validation.status"
+                        class="text-red-500 text-sm bg-red-100 p-2 rounded-md mt-1"
+                    >
+                        {{ validation.status[0] }}
+                    </p>
+                </div>
+
                 <!-- Action Buttons -->
                 <div class="flex space-x-3">
                     <button
@@ -200,7 +221,7 @@ export default {
                 email: "",
                 telepon: "",
                 alamat: "",
-                status: "Aktif",
+                status: "",
             },
             // Validation error messages
             validation: [],
