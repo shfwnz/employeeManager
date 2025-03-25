@@ -16,7 +16,6 @@ class DivisionController extends Controller
         // get latest divisions
         $divisions = Division::latest()->paginate(5);
 
-        // return response
         return new BaseResource(true, 'Daftar divisi', $divisions);
     }
 
@@ -40,7 +39,6 @@ class DivisionController extends Controller
             'deskripsi' => $request->deskripsi
         ]);
 
-        // return response
         return new BaseResource(true, 'Data divisi ditambahkan', $division);
     }
 
@@ -55,7 +53,6 @@ class DivisionController extends Controller
             return response()->json(['success' => false, 'message' => 'divisi tidak ditemukan'], 404);
         }
 
-        // return response
         return new BaseResource(true, 'Detail divisi', $division);
     }
 
@@ -84,7 +81,6 @@ class DivisionController extends Controller
         // update division
         $division->update($request->all());
 
-        // return response
         return new BaseResource(true, 'Data divisi berhasil diupdate', $division);
     }
 
@@ -102,7 +98,6 @@ class DivisionController extends Controller
         // delete division
         $division->delete();
 
-        // return response
         return new BaseResource(true, 'Data divisi berhasil dihapus', $division);
     }
 }
